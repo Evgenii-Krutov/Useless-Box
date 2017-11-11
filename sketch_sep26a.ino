@@ -7,17 +7,17 @@ int PHOTO_PIN = 0;
 int COUNT = 0;
 int RANDOM_NUMBER;
 
-int ENGINE_A = 5;
-int IN_1 = 6;
-int IN_2 = 7;
+int ENGINE_A = 10;
+int IN_1 = 9;
+int IN_2 = 8;
 
-int ENGINE_B = 8;
-int IN_3 = 9;
-int IN_4 = 10;
+int ENGINE_B = 5;
+int IN_3 = 6;
+int IN_4 = 7;
  
 void setup() {
   SERVO_DRIVE.attach(2);
-  SERVO_DRIVE.write(90);
+  SERVO_DRIVE.write(0);
   
   pinMode(ENGINE_A, OUTPUT);
   pinMode(IN_1, OUTPUT);
@@ -33,34 +33,36 @@ void loop() {
   TUMBLER_PIN = digitalRead(4);
   PHOTO_PIN = digitalRead(3);
   Serial.println(PHOTO_PIN);
-  if(PHOTO_PIN == 1) {
-    if(TUMBLER_PIN == HIGH) {
-      RANDOM_NUMBER = random(1,6);
-      switch(RANDOM_NUMBER) {
-        case 1: holdingSwitch();delay(3000); break;
-        case 2: quietSwitch();delay(3000); break;
-        case 3: regularSwitch();delay(3000); break;
-        case 4: playingSwitch();delay(3000); break;
-        case 5: thinkingSwitch();delay(3000); break;
-      }
-      COUNT += 1; 
-    }
-  }else {
-    if(COUNT > 5){
-      engineStart();
-      COUNT = 0;
-    }
-  }
+  engineStart();
+//  if(PHOTO_PIN == 1) {
+//    if(TUMBLER_PIN == HIGH) {
+//      RANDOM_NUMBER = 3;
+//      switch(RANDOM_NUMBER) {
+//        case 1: holdingSwitch();delay(3000); break;
+//        case 2: quietSwitch();delay(3000); break;
+//        case 3: regularSwitch();delay(3000); break;
+//        case 4: playingSwitch();delay(3000); break;
+//        case 5: thinkingSwitch();delay(3000); break;
+//      }
+//      COUNT += 1; 
+//    }
+//  }else {
+//    if(COUNT > 1){
+//      engineStart();
+//      COUNT = 0;
+//    }
+//  }
 }
 
 void regularSwitch() {
-  for (SERVO_POS = 0; SERVO_POS <= 90; SERVO_POS += 1) {
+  delay(1000);
+  for (SERVO_POS = 0; SERVO_POS <= 120; SERVO_POS += 10) {
     SERVO_DRIVE.write(SERVO_POS);
-    delay(3);
+    delay(20);
   }
-  for (SERVO_POS = 90; SERVO_POS >= 0; SERVO_POS -= 1) {
+  for (SERVO_POS = 120; SERVO_POS >= 0; SERVO_POS -= 10) {
     SERVO_DRIVE.write(SERVO_POS);
-    delay(3);
+    delay(20);
   }
 }
 
@@ -128,18 +130,18 @@ void thinkingSwitch() {
 }
 
 void engineStart() {
-  digitalWrite(IN_1, HIGH);
-  digitalWrite(IN_2, LOW);
-  analogWrite(ENGINE_A, 220);
-  
+  digitalWrite(IN_1, LOW);
+  digitalWrite(IN_2, HIGH);
+  analogWrite(ENGINE_A, 225);
   digitalWrite(IN_3, LOW);
   digitalWrite(IN_4, HIGH);
-  analogWrite(ENGINE_B, 220);
-
+  analogWrite(ENGINE_B, 225);
+  Serial.println("BITCH!");
   delay(1500);
   digitalWrite(IN_1, LOW);
   digitalWrite(IN_2, LOW);
   digitalWrite(IN_3, LOW);
   digitalWrite(IN_4, LOW);  
+  delay(2000);  
 }
 
